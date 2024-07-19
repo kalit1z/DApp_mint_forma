@@ -13,16 +13,16 @@ export default function Home() {
         </h1>
         <p className="home_inner_description">
           Non, vous ne rêvez pas. <br/>
-          Vous avez l'opportunité unique de faire partie de ceux qui verront. Alors, rejoignez-nous de l'autre côté.
+          Vous avez l'opportunité unique de faire partie de ceux qui verront.
         </p>
         <div className="home_inner_links">
           <Link href="mint" className="mr-5">
             <Button className="home_inner_links_button1 hover:bg-[#C8B1F4]">
-              <HomeIcon className="mr-2" /> Rejoignez-nous
+              <HomeIcon className="mr-2" />Rejoignez-nous
             </Button>
           </Link>
           <div>Et</div>
-          <Link href="" className="ml-5">
+          <Link href="club" className="ml-5">
             <Button className="home_inner_links_button2">
               <EyeOpenIcon className="mr-2" />Vous verrez
             </Button>
