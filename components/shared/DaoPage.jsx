@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useAccount, useContractRead, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { contractDaoAddress, contractDaoAbi } from '@/constants';
+import { useAccount, useContractRead, useWriteContract, useWaitForTransactionReceipt, useReadContract } from "wagmi";
+import { contractDaoAddress, contractDaoAbi, contractAddress, contractAbi } from '@/constants';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Alert } from "@/components/ui/alert";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 const DaoPage = () => {
   const { address } = useAccount();
@@ -23,6 +25,9 @@ const DaoPage = () => {
   const [currentProposalId, setCurrentProposalId] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // State for NFT balance
+  const [balanceOf, setBalanceOf] = useState(0);
+
   const { data: hash, isPending: isVotingPending, error: writeError, writeContract } = useWriteContract();
   const { data: proposal, error: readError } = useContractRead({
     address: contractDaoAddress,
@@ -30,6 +35,13 @@ const DaoPage = () => {
     functionName: 'proposals',
     args: [currentProposalId],
     enabled: currentProposalId !== null
+  });
+
+  const { data: balanceOfData } = useReadContract({
+    address: contractAddress,
+    abi: contractAbi,
+    functionName: 'balanceOf',
+    args: [address],
   });
 
   const isOwner = useMemo(() => {
@@ -50,6 +62,24 @@ const DaoPage = () => {
       fetchProposal(currentProposalId);
     }
   }, [currentProposalId, loading]);
+
+  useEffect(() => {
+    const fetchBalance = () => {
+      if (address) {
+        if (balanceOfData !== undefined) {
+          const balance = Number(balanceOfData.toString());
+          setBalanceOf(balance);
+          console.log('Balance:', balanceOfData.toString());
+        }
+      }
+    };
+
+    fetchBalance();
+
+    const intervalId = setInterval(fetchBalance, 100000000);
+
+    return () => clearInterval(intervalId);
+  }, [address, balanceOfData]);
 
   const fetchProposal = async (id) => {
     try {
@@ -123,7 +153,19 @@ const DaoPage = () => {
     return now < endDate ? "En cours" : "Terminée";
   };
 
+  if (balanceOf < 1) {
+    return (
+      <Alert>
+        <div style={{ textAlign: 'center' }}>
+          <ExclamationTriangleIcon style={{ display: 'block', margin: '0 auto', color: 'orange' }} />
+          <p>Le Christ Cosmique ne vous a pas donné l'autorisation de voir le contenu.</p>
+        </div>
+      </Alert>
+    );
+  }
+
   return (
+    
     <div style={{
       display: 'flex',
       flexDirection: 'column',
@@ -132,6 +174,15 @@ const DaoPage = () => {
       minHeight: '100vh',
       padding: '20px'
     }}>
+      <div className="home">
+      <div className="home_inner p-4 md:p-0"> {/* Added padding for mobile */}
+        <h1 className="home_inner_title">
+            Votre opinion compte ! <br/>
+          <span className="home_inner_title_colored"> Ici, vous pouvez </span>  voter pour la
+          <span className="home_inner_title_colored"> suite du projet !</span>
+        </h1>
+      </div>
+    </div>
       {/* Voting form at the top */}
       {selectedProposalId !== null && (
         <Card style={{
@@ -185,7 +236,7 @@ const DaoPage = () => {
       )}
 
       {loading ? (
-        <p>Loading proposals...</p>
+        <p>Chargement ...'Rechargez la page si nécessaire.'</p>
       ) : (
         proposals.map((proposal) => {
           const status = getProposalStatus(proposal);
@@ -202,17 +253,17 @@ const DaoPage = () => {
               <p><strong>Description:</strong> {proposal[0] || 'N/A'}</p>
               <p><strong>Option 1:</strong> {proposal[1] || 'N/A'}</p>
               <p><strong>Option 2:</strong> {proposal[2] || 'N/A'}</p>
-              <p><strong>End Date & Time:</strong> {getEndDate(proposal).toLocaleString()}</p>
+              <p><strong>Date de fin:</strong> {getEndDate(proposal).toLocaleString()}</p>
               
-              {status !== "En cours" && (
+              {status !== "En cours ou relancer la page" && (
                 <>
-                  <p><strong>Vote Count 1:</strong> {proposal[5] ? Number(proposal[5]).toString() : '0'}</p>
-                  <p><strong>Vote Count 2:</strong> {proposal[6] ? Number(proposal[6]).toString() : '0'}</p>
+                  <p><strong>Vote Option 1:</strong> {proposal[5] ? Number(proposal[5]).toString() : '0'}</p>
+                  <p><strong>Vote Option 2:</strong> {proposal[6] ? Number(proposal[6]).toString() : '0'}</p>
                 </>
               )}
               
               {status === "En cours" && (
-                <Button onClick={() => setSelectedProposalId(proposal.id)}>Select this Proposal to Vote</Button>
+                <Button onClick={() => setSelectedProposalId(proposal.id)}>Sélectionnez cette proposition pour voter</Button>
               )}
             </Card>
           );
@@ -275,7 +326,7 @@ const DaoPage = () => {
               flexDirection: 'column',
               gap: '10px'
             }}>
-              <label>Duration (in seconds)</label>
+              <label>Durée (in seconds)</label>
               <Input
                 type="number"
                 value={duration}
@@ -284,10 +335,10 @@ const DaoPage = () => {
               />
             </div>
             <Button type="submit" disabled={isCreatingProposal}>
-              {isCreatingProposal ? 'Creating Proposal...' : 'Create Proposal'}
+              {isCreatingProposal ? 'Création ...' : 'Créer une proposition'}
             </Button>
-            {writeError && <p style={{ color: 'red' }}>There was an error creating the proposal</p>}
-            {proposalCreated && <p style={{ color: 'green' }}>Proposal created successfully!</p>}
+            {writeError && <p style={{ color: 'red' }}>Une erreur est survenue lors de la création de la proposition</p>}
+            {proposalCreated && <p style={{ color: 'green' }}>Proposition créée avec succès !</p>}
           </form>
         </Card>
       )}

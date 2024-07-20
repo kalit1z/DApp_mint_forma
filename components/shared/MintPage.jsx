@@ -117,7 +117,7 @@ const MintPage = () => {
           </div>
           {showImage && (
             <div className="image-container">
-              <Image src="/imgMint.png" alt="Mint Image" width={500} height={500} style={{ maxWidth: '100%', height: 'auto' }} />
+              <Image src="/imgMint.png" alt="Mint Image" width={600} height={600} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           )}
         </div>
@@ -128,6 +128,7 @@ const MintPage = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
+          padding: 10px; /* Ajout de marges pour les mobiles */
         }
 
         .card {
@@ -138,6 +139,7 @@ const MintPage = () => {
           max-width: 1000px;
           width: 90%;
           margin-top: 20px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .content {
@@ -216,7 +218,7 @@ const MintPage = () => {
           }
 
           .image-container img {
-            width: 100%;
+            width: 90%;
             height: auto;
           }
         }

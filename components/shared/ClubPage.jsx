@@ -47,25 +47,22 @@ const ClubPage = () => {
         <div className="home_inner p-4 md:p-0"> {/* Added padding for mobile */}
           <h1 className="home_inner_title">
           Bienvenue, 
-            <span className="home_inner_title_colored"> Astraliens !</span>
+            <span className="home_inner_title_colored"> Astraliens </span>
           </h1>
           <p className="home_inner_description">
           Vous faites désormais partie des nôtres. <br/> Voici ce à quoi vous avez accès :
           </p>
           <div className="home_inner_links">
-          <Link href="club/dao" className="mr-5">
-            <Button className="home_inner_links_button1 hover:bg-[#C8B1F4]">
-              <SunIcon  className="mr-2" />Créez votre token
-            </Button>
-          </Link>
-          <Link href="club/dao" className="ml-5 mr-5">
+          <Link href="club/dao" className="">
             <Button className="home_inner_links_button2">
               <FaceIcon className="mr-2" />DAO
             </Button>
           </Link>
-          <Link href="club/dao" className="ml-5">
+        </div>
+          <div className="home_inner_links">
+          <Link href="club/dao" className="">
             <Button className="home_inner_links_button1 hover:bg-[#C8B1F4]">
-              <SunIcon  className="mr-2" />Gérez vos tokens
+              <SunIcon  className="mr-2" />Créez votre token
             </Button>
           </Link>
         </div>
