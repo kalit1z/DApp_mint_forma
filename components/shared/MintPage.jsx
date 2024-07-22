@@ -95,40 +95,42 @@ const MintPage = () => {
           </div>
         </Alert>
       )}
-      <Card className="card">
-        <div className="content">
-          <div className="text-content">
-            <h2>Durif's Odyssey</h2>
-            <p>Chaque NFT coûte 50 MATIC</p>
-            <p>{totalSupply}/499</p>
-            <div className="button-group">
-              <Button variant="outline" disabled={isMinting} onClick={() => mint(1)}>
-                Mint 1 NFT
-              </Button>
-              <Button variant="outline" disabled={isMinting} onClick={() => mint(2)}>
-                Mint 2 NFTs
-              </Button>
-              <Button variant="outline" disabled={isMinting} onClick={() => mint(3)}>
-                Mint 3 NFTs
-              </Button>
+      {!showAlert && (
+        <Card className="card">
+          <div className="content">
+            <div className="text-content">
+              <h2>Durif's Odyssey</h2>
+              <p>Chaque NFT coûte 50 MATIC</p>
+              <p>{totalSupply}/499</p>
+              <div className="button-group">
+                <Button variant="outline" disabled={isMinting} onClick={() => mint(1)}>
+                  Mint 1 NFT
+                </Button>
+                <Button variant="outline" disabled={isMinting} onClick={() => mint(2)}>
+                  Mint 2 NFTs
+                </Button>
+                <Button variant="outline" disabled={isMinting} onClick={() => mint(3)}>
+                  Mint 3 NFTs
+                </Button>
+              </div>
+              {isMinting && <p className="status">Minting en cours...</p>}
+              {mintError && <p className="error">{mintError}</p>}
             </div>
-            {isMinting && <p className="status">Minting en cours...</p>}
-            {mintError && <p className="error">{mintError}</p>}
+            {showImage && (
+              <div className="image-container">
+                <Image src="/imgMint.png" alt="Mint Image" width={600} height={600} style={{ maxWidth: '100%', height: 'auto' }} />
+              </div>
+            )}
           </div>
-          {showImage && (
-            <div className="image-container">
-              <Image src="/imgMint.png" alt="Mint Image" width={600} height={600} style={{ maxWidth: '100%', height: 'auto' }} />
-            </div>
-          )}
-        </div>
-      </Card>
+        </Card>
+      )}
 
       <style jsx>{`
         .container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 10px; /* Ajout de marges pour les mobiles */
+          padding: 10px;
         }
 
         .card {
@@ -145,7 +147,7 @@ const MintPage = () => {
         .content {
           display: flex;
           flex-direction: row;
-          align-items: center; /* Centre verticalement le contenu */
+          align-items: center;
           justify-content: center;
           width: 100%;
           gap: 20px;
@@ -157,7 +159,7 @@ const MintPage = () => {
           font-family: Arial, sans-serif;
           display: flex;
           flex-direction: column;
-          justify-content: center; /* Centre verticalement le texte */
+          justify-content: center;
         }
 
         .text-content h2 {
