@@ -229,7 +229,7 @@ const DaoPage = () => {
             <Button type="submit" disabled={isVotingPending}>
               {isVotingPending ? 'Submitting Vote...' : 'Submit Vote'}
             </Button>
-            {writeError && <p style={{ color: 'red' }}>There was an error submitting the vote</p>}
+            {writeError && <p style={{ color: 'red' }}>Il y a eu une erreur lors de la soumission du vote.</p>}
             {voteSubmitted && <p style={{ color: 'green' }}>Votre vote a bien été pris en compte</p>}
           </form>
         </Card>

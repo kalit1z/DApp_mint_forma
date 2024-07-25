@@ -29,6 +29,7 @@ const MintPage = () => {
   const [totalSupply, setTotalSupply] = useState(0);
   const [isMinting, setIsMinting] = useState(false);
   const [mintError, setMintError] = useState('');
+  const [mintSuccess, setMintSuccess] = useState(false);
 
   const pricePerNFTInMATIC = parseEther("50"); // 50 MATIC
 
@@ -63,6 +64,7 @@ const MintPage = () => {
   const mint = async (numberOfNFTs) => {
     setIsMinting(true);
     setMintError('');
+    setMintSuccess(false);
     try {
       if (!walletClient) {
         throw new Error("Wallet client not available");
@@ -77,7 +79,7 @@ const MintPage = () => {
       // Mise à jour du totalSupply après le mint
       const newTotalSupply = await contract.totalSupply();
       setTotalSupply(Number(newTotalSupply.toString()));
-      alert("Votre(s) NFT(s) a/ont été minté(s) avec succès !");
+      setMintSuccess(true);
     } catch (e) {
       console.error(e);
       setMintError("Une erreur s'est produite lors du minting. Veuillez réessayer.");
@@ -95,40 +97,43 @@ const MintPage = () => {
           </div>
         </Alert>
       )}
-      <Card className="card">
-        <div className="content">
-          <div className="text-content">
-            <h2>Durif's Odyssey</h2>
-            <p>Chaque NFT coûte 50 MATIC</p>
-            <p>{totalSupply}/499</p>
-            <div className="button-group">
-              <Button variant="outline" disabled={isMinting} onClick={() => mint(1)}>
-                Mint 1 NFT
-              </Button>
-              <Button variant="outline" disabled={isMinting} onClick={() => mint(2)}>
-                Mint 2 NFTs
-              </Button>
-              <Button variant="outline" disabled={isMinting} onClick={() => mint(3)}>
-                Mint 3 NFTs
-              </Button>
+      {!showAlert && (
+        <Card className="card">
+          <div className="content">
+            <div className="text-content">
+              <h2>Durif's Odyssey</h2>
+              <p>Chaque NFT coûte 50 MATIC</p>
+              <p>{totalSupply}/499</p>
+              <div className="button-group">
+                <Button variant="outline" disabled={isMinting} onClick={() => mint(1)}>
+                  Mint 1 NFT
+                </Button>
+                <Button variant="outline" disabled={isMinting} onClick={() => mint(2)}>
+                  Mint 2 NFTs
+                </Button>
+                <Button variant="outline" disabled={isMinting} onClick={() => mint(3)}>
+                  Mint 3 NFTs
+                </Button>
+              </div>
+              {isMinting && <p className="status">Minting en cours...</p>}
+              {mintError && <p className="error">{mintError}</p>}
+              {mintSuccess && <p className="success">Votre(s) NFT(s) a/ont été minté(s) avec succès !</p>}
             </div>
-            {isMinting && <p className="status">Minting en cours...</p>}
-            {mintError && <p className="error">{mintError}</p>}
+            {showImage && (
+              <div className="image-container">
+                <Image src="/imgMint.png" alt="Mint Image" width={600} height={600} style={{ maxWidth: '100%', height: 'auto' }} />
+              </div>
+            )}
           </div>
-          {showImage && (
-            <div className="image-container">
-              <Image src="/imgMint.png" alt="Mint Image" width={600} height={600} style={{ maxWidth: '100%', height: 'auto' }} />
-            </div>
-          )}
-        </div>
-      </Card>
+        </Card>
+      )}
 
       <style jsx>{`
         .container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 10px; /* Ajout de marges pour les mobiles */
+          padding: 10px;
         }
 
         .card {
@@ -145,7 +150,7 @@ const MintPage = () => {
         .content {
           display: flex;
           flex-direction: row;
-          align-items: center; /* Centre verticalement le contenu */
+          align-items: center;
           justify-content: center;
           width: 100%;
           gap: 20px;
@@ -157,7 +162,7 @@ const MintPage = () => {
           font-family: Arial, sans-serif;
           display: flex;
           flex-direction: column;
-          justify-content: center; /* Centre verticalement le texte */
+          justify-content: center;
         }
 
         .text-content h2 {
@@ -192,6 +197,11 @@ const MintPage = () => {
 
         .error {
           color: red;
+          margin-top: 10px;
+        }
+
+        .success {
+          color: green;
           margin-top: 10px;
         }
 
