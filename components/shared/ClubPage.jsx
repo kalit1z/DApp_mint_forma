@@ -60,11 +60,11 @@ const ClubPage = () => {
           </Link>
         </div>
           <div className="home_inner_links">
-          <Link href="club/dao" className="">
-            <Button className="home_inner_links_button1 hover:bg-[#C8B1F4]">
-              <SunIcon  className="mr-2" />Créez votre token
-            </Button>
-          </Link>
+<Link href="https://forge-monnaie.vercel.app">
+  <Button className="home_inner_links_button1 hover:bg-[#C8B1F4]">
+    <SunIcon className="mr-2" />Créez votre token
+  </Button>
+</Link>
         </div>
         </div>
       </div>
