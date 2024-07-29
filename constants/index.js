@@ -588,7 +588,7 @@ export const contractAbi=[
       "type": "function"
     }
   ]
-export const contractDaoAddress="0x77558FaCB167aB5F1E1CDc0B89586098D303eAB9"
+export const contractDaoAddress="0x88869E73a7b0b5c7C2337A937592c12Fd3B52F33"
 export const contractDaoAbi=[
   {
     "inputs": [
