@@ -7,13 +7,13 @@ export default function Home() {
     <div className="home">
       <div className="home_inner p-4 md:p-0"> {/* Added padding for mobile */}
         <h1 className="home_inner_title">
-          Découvrez les merveilles de <br/>
-          <span className="home_inner_title_colored"> Merlin l'Enchanteur</span> et accédez à ce que les
+          Rejoignez 
+          <span className="home_inner_title_colored"> les GOAT OF WE3</span>  <br/>et accédez à ce que les <br/>
           <span className="home_inner_title_colored"> autres ne voient pas.</span>
         </h1>
         <p className="home_inner_description">
           Non, vous ne rêvez pas. <br/>
-          Vous avez l'opportunité unique de faire partie de ceux qui verront.
+          Vous avez l'opportunité unique de faire partie des GOW3.
         </p>
         <div className="home_inner_links">
           <Link href="mint" className="mr-5">

@@ -11,8 +11,8 @@ const fontSans = FontSans({
 })
 
 export const metadata = {
-  title: "Durif's minting DApp",
-  description: "Durif's minting DApp",
+  title: "GOAT OF WEB3",
+  description: "GOAT OF WEB3 DApp",
 };
 
 export default function RootLayout({ children }) {

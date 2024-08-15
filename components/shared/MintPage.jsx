@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, useReadContract, useContractWrite, useWaitForTransactionReceipt, useWalletClient } from 'wagmi';
+import { useAccount, useReadContract, useWalletClient } from 'wagmi';
 import { contractAddress, contractAbi } from '@/constants';
 import { Card } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
@@ -30,8 +30,6 @@ const MintPage = () => {
   const [isMinting, setIsMinting] = useState(false);
   const [mintError, setMintError] = useState('');
   const [mintSuccess, setMintSuccess] = useState(false);
-
-  const pricePerNFTInMATIC = parseEther("50"); // 50 MATIC
 
   useEffect(() => {
     if (saleStartTimeData) {
@@ -65,26 +63,31 @@ const MintPage = () => {
     setIsMinting(true);
     setMintError('');
     setMintSuccess(false);
+
     try {
       if (!walletClient) {
         throw new Error("Wallet client not available");
       }
 
       const contract = new Contract(contractAddress, contractAbi, walletClient);
-      const value = parseEther((50 * numberOfNFTs).toString());
-      
+      const value = parseEther((0 * numberOfNFTs).toString());
+
       const transaction = await contract.mint(numberOfNFTs, { value });
-      await transaction.wait();
-      
-      // Mise à jour du totalSupply après le mint
-      const newTotalSupply = await contract.totalSupply();
-      setTotalSupply(Number(newTotalSupply.toString()));
-      setMintSuccess(true);
+      const receipt = await transaction.wait();
+
+      if (receipt.status === 1) {
+        const newTotalSupply = await contract.totalSupply();
+        setTotalSupply(Number(newTotalSupply.toString()));
+        setMintSuccess(true);
+      } else {
+        throw new Error("La transaction a échoué, mais sans erreur critique.");
+      }
     } catch (e) {
       console.error(e);
       setMintError("Une erreur s'est produite lors du minting. Veuillez réessayer.");
+    } finally {
+      setIsMinting(false);
     }
-    setIsMinting(false);
   };
 
   return (
@@ -101,22 +104,15 @@ const MintPage = () => {
         <Card className="card">
           <div className="content">
             <div className="text-content">
-              <h2>Durif's Odyssey</h2>
-              <p>Chaque NFT coûte 50 MATIC</p>
+              <h2>GOAT OF WEB3</h2>
+              <p>C'est gratuit !</p>
               <p>{totalSupply}/499</p>
               <div className="button-group">
                 <Button variant="outline" disabled={isMinting} onClick={() => mint(1)}>
                   Mint 1 NFT
                 </Button>
-                <Button variant="outline" disabled={isMinting} onClick={() => mint(2)}>
-                  Mint 2 NFTs
-                </Button>
-                <Button variant="outline" disabled={isMinting} onClick={() => mint(3)}>
-                  Mint 3 NFTs
-                </Button>
               </div>
               {isMinting && <p className="status">Minting en cours...</p>}
-              {mintError && <p className="error">{mintError}</p>}
               {mintSuccess && <p className="success">Votre(s) NFT(s) a/ont été minté(s) avec succès !</p>}
             </div>
             {showImage && (
